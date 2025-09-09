@@ -27,16 +27,31 @@ class Building  {
         this.latitude = latitude;
     }
 
+    public String getLatitude() {
+        return latitude;
+    }
+
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setDesc_address(String desc_address) {
         this.desc_address = desc_address;
+    }
+    public String getDesc_address() {
+        return desc_address;
     }
 
     public void setMunicipality(String municipality) {

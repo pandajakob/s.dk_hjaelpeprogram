@@ -1,11 +1,8 @@
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -26,6 +23,11 @@ public class User {
     public void setPk(int pk) {
         this.pk = pk;
     }
+
+    public int getPk() {
+        return pk;
+    }
+
     public boolean getLoggedIn() {
         return loggedIn;
     }
@@ -49,6 +51,10 @@ public class User {
 
     public Building[] getBuildings() {
         return buildings;
+    }
+
+    public void setBuildings(Building[] buildings) {
+        this.buildings = buildings;
     }
 
     public void generateCSRFToken() throws IOException {
@@ -100,7 +106,6 @@ public class User {
 
     }
 
-
     public void fetchApplicantPk() throws IOException {
         URL url = new URL("https://mit.s.dk/api/applicant/");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -129,7 +134,6 @@ public class User {
             System.out.println("HTTP  error: " + responseCode);
         }
     }
-
 
     public void fetchBuildings() throws IOException {
         int page = 1;
@@ -176,11 +180,10 @@ public class User {
             }
         }
     }
-    public void sortBuildings()  {
 
+    public void sortBuildings()  {
         Arrays.sort(this.buildings, Comparator.comparingInt(d-> -d.getRanking('A')));
     }
-
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)

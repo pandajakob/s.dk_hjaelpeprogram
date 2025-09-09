@@ -33,8 +33,8 @@ public class Main {
         Building[] buildings = user.getBuildings();
 
         for (Building building : buildings) {
-            System.out.println(building.name + " - " + building.desc_address);
-            System.out.println("https://www.google.com/maps?q="+building.latitude+","+building.longitude);
+            System.out.println(building.getName() + " - " + building.getDesc_address());
+            System.out.println("https://www.google.com/maps?q="+building.getLatitude()+","+building.getLongitude());
             System.out.println("A: " +building.getRanking('A'));
             System.out.println("B: " +building.getRanking('B'));
             System.out.println("C: " +building.getRanking('C'));
