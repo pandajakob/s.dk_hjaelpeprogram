@@ -14,6 +14,14 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+
+        AuthService auth = new AuthService();
+        auth.requestCsrfToken();
+        System.out.println(auth.getCsrftoken());
+        auth.login("therealjakobmichaelsen@gmail.com", "dirryk-syntuV-gicfa3");
+        System.out.println(auth.getSessionID());
+
+        /*
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("Enter email:");
         String email = myObj.nextLine();  // Read user input
@@ -41,5 +49,6 @@ public class Main {
 
             System.out.println("\n");
         }
+        */
     }
 }
