@@ -1,14 +1,18 @@
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         HttpClientService httpClient = new HttpClientService();
         AuthService auth = new AuthService(httpClient);
 
-        Session session = auth.login("therealjakobmichaelsen@gmail.com", "dirryk-syntuV-gicfa3");
+        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+        System.out.println("Enter email:");
+        String email = myObj.nextLine();  // Read user input
+        System.out.println("Enter password:");
+        String password = myObj.nextLine();
 
-        System.out.println(session.getCsrftoken());
-        System.out.println(session.getSessionId());
+        Session session = auth.login(email, password);
 
         UserService userService = new UserService(session, httpClient);
         User user = userService.retrieveUser();
@@ -27,11 +31,7 @@ public class Main {
 }
 
         /*
-        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        System.out.println("Enter email:");
-        String email = myObj.nextLine();  // Read user input
-        System.out.println("Enter password:");
-        String password = myObj.nextLine();
+
 
         User user = new User(email, password);
         user.generateCSRFToken();
