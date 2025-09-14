@@ -1,25 +1,19 @@
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Scanner;
-
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        HttpClientService httpClient = new HttpClientService();
+        AuthService auth = new AuthService(httpClient);
 
-        AuthService auth = new AuthService();
-        auth.requestCsrfToken();
-        System.out.println(auth.getCsrftoken());
-        auth.login("therealjakobmichaelsen@gmail.com", "dirryk-syntuV-gicfa3");
-        System.out.println(auth.getSessionID());
+        Session session = auth.login("therealjakobmichaelsen@gmail.com", "dirryk-syntuV-gicfa3");
+
+        System.out.println(session.getCsrftoken());
+        System.out.println(session.getSessionId());
+
+        UserService userService = new UserService(session, httpClient);
+        User user = userService.retrieveUser();
+    }
+}
 
         /*
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
@@ -50,5 +44,3 @@ public class Main {
             System.out.println("\n");
         }
         */
-    }
-}

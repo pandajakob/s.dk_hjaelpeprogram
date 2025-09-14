@@ -1,3 +1,5 @@
+import com.sun.net.httpserver.Headers;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -9,33 +11,29 @@ public class HttpClientService {
     HTTPResponse get(String uri, Map<String, List<String>> headers) throws IOException {
         // send get request
         URL url = new URL(uri);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        int responseCode = con.getResponseCode();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        setConRequestHeaders(conn, headers);
 
 
-        if (!headers.isEmpty()) {
-            // set the headers
-            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-                List<String> headerValues = entry.getValue();
-                String key = entry.getKey();
-                boolean first = true;
-                for (String val : headerValues) {
-                    if (first) {
-                        con.setRequestProperty(key, val);
-                        first = false;
-                    } else {
-                        con.addRequestProperty(key, val);
-                    }
-                }
-            }
+
+        int responseCode = conn.getResponseCode();
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            System.out.println("Error get request: "+uri);
         }
+        // Get the body
+        StringBuilder sb = new StringBuilder();
+        Scanner scanner = new Scanner(conn.getInputStream());
+        while (scanner.hasNext()) {
+            sb.append(scanner.nextLine());
+        }
+        String body = sb.toString();
 
         // get the headers
-        Map<String, List<String>> hf = con.getHeaderFields();
+        Map<String, List<String>> hf = conn.getHeaderFields();
 
         // return the headers
-        return new HTTPResponse("body", hf);
+        return new HTTPResponse(body, hf);
     };
 
     HTTPResponse post(String uri, String urlParameters, Map<String, List<String>> headers) throws IOException{
@@ -43,14 +41,42 @@ public class HttpClientService {
         byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
 
         URL url = new URL(uri);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        con.setDoOutput(true);
-        con.setRequestProperty("Origin", "https://mit.s.dk");
-        con.setRequestProperty("Referer", "https://mit.s.dk/studiebolig/login/");
-        con.setRequestProperty("charset", "utf-8");
-        con.setInstanceFollowRedirects(false);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+        conn.setInstanceFollowRedirects(false);
+
+        // set the custom headers
+        setConRequestHeaders(conn, headers);
+
+        try (DataOutputStream dos = new DataOutputStream(conn.getOutputStream())) {
+            dos.write(postData);
+        }
+
+        // Validate response code
+        int responseCode = conn.getResponseCode();
+        if (!(responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_TEMP)) {
+            System.out.println("Login failed: " + conn.getResponseCode());
+            throw new RuntimeException("Error sending post request to:" + uri + " Error: " + responseCode);
+        }
+
+        // Get the body
+        StringBuilder sb = new StringBuilder();
+        Scanner scanner = new Scanner(conn.getInputStream());
+        while (scanner.hasNext()) {
+            sb.append(scanner.nextLine());
+        }
+        String body = sb.toString();
+
+        // get the headers
+        Map<String, List<String>> hf = conn.getHeaderFields();
+
+        // return the body + headers
+        return new HTTPResponse(body, hf);
+    };
+
+
+    void setConRequestHeaders(HttpURLConnection conn, Map<String, List<String>> headers) {
         if (!headers.isEmpty()) {
             // set the headers
             for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
@@ -59,34 +85,16 @@ public class HttpClientService {
                 boolean first = true;
                 for (String val : headerValues) {
                     if (first) {
-                        con.setRequestProperty(key, val);
+                        conn.setRequestProperty(key, val);
                         first = false;
                     } else {
-                        con.addRequestProperty(key, val);
+                        conn.addRequestProperty(key, val);
                     }
                 }
 
             }
         }
 
-        try (DataOutputStream dos = new DataOutputStream(con.getOutputStream())) {
-            dos.write(postData);
-        }
-
-        int responseCode = con.getResponseCode();
-
-        if (!(responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_TEMP)) {
-            System.out.println("Login failed: " + con.getResponseCode());
-        }
-        // get the headers
-        Map<String, List<String>> hf = con.getHeaderFields();
-
-        // return the body + headers
-        return new HTTPResponse("body", hf);
-    };
-
-    String getValueFromCookieString(String cookieString) {
-        return cookieString.substring(0, cookieString.indexOf(";")).substring(cookieString.indexOf("=")+1);
     }
 }
 

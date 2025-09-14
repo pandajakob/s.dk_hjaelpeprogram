@@ -1,95 +1,61 @@
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
+import java.util.*;
 
 
 public class AuthService {
-    private String sessionID;
-    private String csrftoken;
-    private HttpClientService client = new HttpClientService();
+    private HttpClientService httpClient;
 
-    public String getCsrftoken() {
-        return csrftoken;
+    AuthService(HttpClientService httpClient) {
+        this.httpClient = httpClient;
+
     }
+    private String requestCsrfToken() throws IOException {
+        HTTPResponse res = httpClient.get("https://mit.s.dk/studiebolig/login/", new HashMap<String,List<String>>());
 
-    public String getSessionID() {
-        return sessionID;
-    }
+        CookieParser cp = new CookieParser();
+        Map<String, String> cookies = cp.getAllResponseCookiesFromHeaders(res.headers);
 
-    public void setSessionID(String sessionID) {
-        if (csrftoken.length() == 64) {
-            this.sessionID = sessionID;
-        } else {
-            System.out.println("invalid session_id");
-        }
-    }
+        if (cookies.containsKey("csrftoken")) { return cookies.get("csrftoken"); }
 
-    public void setCsrftoken(String csrftoken) {
-        if (csrftoken.length() == 64) {
-            this.csrftoken = csrftoken;
-        } else {
-            System.out.println("invalid csrf token");
-        }
-    }
-
-    public void requestCsrfToken() throws IOException {
-        HTTPResponse res = client.get("https://mit.s.dk/studiebolig/login/", new HashMap<String,List<String>>());
-        List<String> cookies = res.headers.get("Set-Cookie");
-
-        if (!res.headers.get("Set-Cookie").isEmpty()) {
-            for (String cookie : cookies ) {
-                if (cookie.contains("csrftoken")) {
-                    setCsrftoken(client.getValueFromCookieString(cookie));
-                    break;
-                }
-            }
-        };
-
-        /*
-        for (Map.Entry<String, List<String>> entry : res.headers.entrySet()) { {
-            List<String> headerValues = entry.getValue();
-            String key = entry.getKey();
-            System.out.println(key+ ": ");
-            for (String val : headerValues) {
-                System.out.println(val);
-            }
-            }
-        }
-         */
-
+        throw new RuntimeException("Couldn't get csrf token");
     };
 
-    public void login(String username, String password) throws IOException {
+    /**
+     * Calls the api endpoint for logging in
+     * @param username
+     * @param password
+     * @return Session object with CSRF token and Session token;
+     * @throws IOException
+     */
+    public Session login(String username, String password) throws IOException {
+        String csrftoken = requestCsrfToken();
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
         headers.put("Cookie", Arrays.asList(new String[] {"csrftoken="+csrftoken}));
         headers.put("Origin", Arrays.asList(new String[] {"https://mit.s.dk"}));
         headers.put("Referer", Arrays.asList(new String[] {"https://mit.s.dk/studiebolig/login/"}));
+        headers.put("Content-Type", Arrays.asList(new String[] {"application/x-www-form-urlencoded"}));
 
         String urlParameters = "csrfmiddlewaretoken="+csrftoken+"&username="+username+"&password="+password;
 
-        HTTPResponse res = client.post("https://mit.s.dk/studiebolig/login/", urlParameters, headers);
-        List<String> cookies = res.headers.get("Set-Cookie");
+        HTTPResponse res = httpClient.post("https://mit.s.dk/studiebolig/login/", urlParameters, headers);
 
-        if (!res.headers.get("Set-Cookie").isEmpty()) {
-            for (String cookie : cookies ) {
-                if (cookie.contains("sessionid")) {
-                    setSessionID(client.getValueFromCookieString(cookie));
-                    break;
-                }
-            }
-        } else {
-            System.out.println("no session cookie");
-        };
+        CookieParser cp = new CookieParser();
+        Map<String, String> cookies = cp.getAllResponseCookiesFromHeaders(res.headers);
 
+        if (cookies.containsKey("sessionid")) {
+            String sessionId = cookies.get("sessionid");
+            return new Session(csrftoken, sessionId);
+        }
+
+
+        throw new RuntimeException("Error logging in");
     }
 
 
-
-
-
-
-
 }
+
+

@@ -88,6 +88,7 @@ class Building  {
             String[] splitString = sb.toString().split("(;|\\s|<>|/)+");
 
             for (String split : splitString) {
+
                 if (split.equals("B&nbsp")) {
                     ranking.incrementB();
                 } else if (split.equals("A&nbsp")) {
