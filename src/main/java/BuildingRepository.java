@@ -28,7 +28,7 @@ public class BuildingRepository {
 
         while(next) {
             HTTPResponse res = httpClient.get("https://mit.s.dk/api/building/?has_application_for="+ user.getApplicant_pk() + "&page=" + page, headers);
-            System.out.println(res.body);
+
             if (res.body.length() < 1) {
                 throw new RuntimeException("no buildings found");
             }

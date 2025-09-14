@@ -15,6 +15,14 @@ public class Main {
 
         BuildingRepository buildingsList = new BuildingRepository(session,user,httpClient);
         buildingsList.retrieveAllAppliedBuildings();
+
+        for (Building b : buildingsList.buildings) {
+            b.extractRankings(session.getCsrftoken(), session.getSessionId());
+            System.out.println(b.getDesc_address());
+            System.out.println("A: " +b.getRanking('A'));
+            System.out.println("B: " +b.getRanking('B'));
+            System.out.println("C: " +b.getRanking('C'));
+        }
     }
 }
 

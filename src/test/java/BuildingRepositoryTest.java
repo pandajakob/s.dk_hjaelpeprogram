@@ -16,6 +16,5 @@ class BuildingRepositoryTest implements TestSettings {
         List<Building> buildings = br.retrieveAllAppliedBuildings();
 
         assertEquals(5, buildings.getFirst().getPk());
-        assertEquals(5, buildings.getFirst());
     }
 }
