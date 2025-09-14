@@ -13,14 +13,12 @@ public class CookieParser {
         Map<String, String> cookies = new HashMap<>();
 
         List<String> responseCookies = headers.get("Set-Cookie");
-        
+
         if (responseCookies == null) {
             throw new RuntimeException("No response cookies found");
         }
 
         for (String cookieString : responseCookies ) {
-            System.out.println(cookieString);
-
             cookies.putAll(getCookieFromCookieString(cookieString));
         }
 

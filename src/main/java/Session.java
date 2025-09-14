@@ -1,6 +1,6 @@
 public class Session {
-    String csrftoken;
-    String sessionId;
+    private final String csrftoken;
+    private final String sessionId;
 
     public String getCsrftoken() { return this.csrftoken; }
     public String getSessionId() { return this.sessionId; }

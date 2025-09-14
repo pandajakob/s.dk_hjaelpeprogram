@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public class UserService {
-    Session session;
-    HttpClientService httpClient;
+    private final Session session;
+    private final HttpClientService httpClient;
 
     UserService(Session session, HttpClientService httpClient) {
         this.session = session;

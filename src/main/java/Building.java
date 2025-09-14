@@ -5,59 +5,44 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 class Building  {
-    int pk;
-    String latitude;
-    String longitude;
-    String name;
-    String desc_address;
-    String municipality;
-    Ranking ranking = new Ranking();
+    final private int pk;
+    final private String latitude;
+    final private String longitude;
+    final private String name;
+    final private String desc_address;
+    final private String municipality;
+    final private Ranking ranking = new Ranking();
 
-    public void setPk(int pk) {
-        this.pk = pk;
-    }
 
     public int getPk() {
         return pk;
     }
 
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
 
     public String getLatitude() {
         return latitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
     }
 
     public String getLongitude() {
         return longitude;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setDesc_address(String desc_address) {
-        this.desc_address = desc_address;
     }
     public String getDesc_address() {
         return desc_address;
     }
 
-    public void setMunicipality(String municipality) {
+    Building(int pk, String latitude, String longitude, String name, String desc_address, String municipality) {
+        this.pk = pk;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.name = name;
+        this.desc_address = desc_address;
         this.municipality = municipality;
     }
-
     public int getRanking(char rank) {
         if (rank == 'A') {
             return ranking.getA();
@@ -68,7 +53,6 @@ class Building  {
         }
         return 0;
     }
-
 
     public void extractRankings(String CSRFToken, String sessionID) throws IOException {
         URL url = new URL("https://mit.s.dk/studiebolig/building/" + pk);

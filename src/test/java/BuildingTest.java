@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BuildingTest {
-    Building b = new Building();
+    // Building b = new Building();
 /*
     @Test
     void testRankings() {

@@ -16,6 +16,36 @@ public class HttpClientServiceMock extends HttpClientService  implements TestSet
         } else if ("https://mit.s.dk/api/applicant/".equals(uri)) {
 
             body="{\"results\":[{\"pk\":"+user.getApplicant_pk()+",\"user\":{\"pk\":"+user.getPk()+",\"username\":\""+user.getUsername()+"\",\"first_name\":\""+user.getFirst_name()+"\",\"last_name\":\""+user.getLast_name()+"\",\"applicant_pk\":"+user.getApplicant_pk()+",\"email\":\""+user.getEmail()+"\"}}]}";
+        } else if (uri.contains("https://mit.s.dk/api/building/?has_application_for="+user.getApplicant_pk())) {
+            System.out.println("getting user applications");
+            body = "{\n" +
+                    "    \"count\": 23,\n" +
+                    "    \"next\": null,\n" +
+                    "    \"previous\": null,\n" +
+                    "    \"results\": [\n" +
+                    "        {\n" +
+                    "            \"pk\": 5,\n" +
+                    "            \"latitude\": \"55.68870000\",\n" +
+                    "            \"longitude\": \"12.54672800\",\n" +
+                    "            \"name\": \"Ågården\",\n" +
+                    "            \"desc_address\": \"Kapelvej 52-56\",\n" +
+                    "            \"municipality\": \"København\",\n" +
+                    "            \"parent\": \"https://mit.s.dk/api/application_target/1/\",\n" +
+                    "            \"has_one_room_tenancy\": false\n" +
+                    "        }," +
+                    "           {\n" +
+                    "            \"pk\": 16,\n" +
+                    "            \"latitude\": \"55.67637600\",\n" +
+                    "            \"longitude\": \"12.59976800\",\n" +
+                    "            \"name\": \"Bodenhoffs Plads\",\n" +
+                    "            \"desc_address\": \"Bodenhoffs Plads\",\n" +
+                    "            \"municipality\": \"København\",\n" +
+                    "            \"parent\": \"https://mit.s.dk/api/application_target/1/\",\n" +
+                    "            \"has_one_room_tenancy\": false\n" +
+                    "        }" +
+                    "      ]" +
+                    "   }";
+
         }
 
         return new HTTPResponse(body, responseHeaders);

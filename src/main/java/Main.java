@@ -12,6 +12,9 @@ public class Main {
 
         UserService userService = new UserService(session, httpClient);
         User user = userService.retrieveUser();
+
+        BuildingRepository buildingsList = new BuildingRepository(session,user,httpClient);
+        buildingsList.retrieveAllAppliedBuildings();
     }
 }
 

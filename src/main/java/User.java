@@ -1,10 +1,10 @@
 public class User {
-    private int pk;
-    private int applicant_pk;
-    private String username;
-    private String email;
-    private String first_name;
-    private String last_name;
+    private final int pk;
+    private final int applicant_pk;
+    private final String username;
+    private final String email;
+    private final String first_name;
+    private final String last_name;
 
     public int getPk() { return pk; }
     public String getUsername() { return this.username; }
