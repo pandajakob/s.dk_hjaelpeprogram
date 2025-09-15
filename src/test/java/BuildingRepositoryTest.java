@@ -12,9 +12,11 @@ class BuildingRepositoryTest implements TestSettings {
     BuildingRepository br = new BuildingRepository(new Session(csrftoken,sessionid),user, httpClient);
     @Test
     void testRetrieveAllAppliedBuildings() throws IOException {
-
         List<Building> buildings = br.retrieveAllAppliedBuildings();
-
         assertEquals(5, buildings.getFirst().getPk());
+    }
+
+    @Test void testSortBuildingsByRankings() {
+
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.imageio.IIOException;
 import java.io.IOException;
+import java.lang.classfile.Attribute;
 import java.util.*;
 
 public class BuildingRepository {
@@ -36,7 +37,14 @@ public class BuildingRepository {
             ApiBuildingList apiBuildingList = objectMapper.readValue(res.body, new TypeReference<ApiBuildingList>() {});
 
             for (ApiBuilding b : apiBuildingList.results) {
-                buildings.add(new Building(b.pk,b.latitude,b.longitude,b.name,b.desc_address,b.municipality));
+
+                String html = httpClient.get("https://mit.s.dk/studiebolig/building/" + b.pk, headers).body;
+                if (html != null) {
+                    HTMLBuildingRankingParser htmlBuildingRankingParser = new HTMLBuildingRankingParser();
+                    Ranking ranking = htmlBuildingRankingParser.extractRanking(html);
+
+                    buildings.add(new Building(b.pk, b.latitude, b.longitude, b.name, b.desc_address, b.municipality, ranking));
+                }
             }
 
             if (apiBuildingList.next == null) { next = false; }
@@ -44,6 +52,9 @@ public class BuildingRepository {
         }
 
         return buildings;
+    }
+    public void sortBuildingsByRankings()  {
+        buildings.sort( Comparator.comparingInt( d-> -d.getRanking('A')));
     }
 }
 

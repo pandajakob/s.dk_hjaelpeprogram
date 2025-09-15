@@ -12,37 +12,26 @@ class Building  {
     final private String name;
     final private String desc_address;
     final private String municipality;
-    final private Ranking ranking = new Ranking();
+    final private Ranking ranking;
 
 
-    public int getPk() {
-        return pk;
-    }
+    public int getPk() { return this.pk; }
+    public String getLatitude() { return this.latitude; }
+    public String getLongitude() { return this.longitude; }
+    public String getMunicipality() { return this.municipality; }
+    public String getName() { return this.name; }
+    public String getDesc_address() { return this.desc_address; }
 
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public String getDesc_address() {
-        return desc_address;
-    }
-
-    Building(int pk, String latitude, String longitude, String name, String desc_address, String municipality) {
+    Building(int pk, String latitude, String longitude, String name, String desc_address, String municipality, Ranking ranking) {
         this.pk = pk;
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
         this.desc_address = desc_address;
         this.municipality = municipality;
+        this.ranking = ranking;
     }
+
     public int getRanking(char rank) {
         if (rank == 'A') {
             return ranking.getA();
@@ -54,36 +43,13 @@ class Building  {
         return 0;
     }
 
-    public void extractRankings(String CSRFToken, String sessionID) throws IOException {
-        URL url = new URL("https://mit.s.dk/studiebolig/building/" + pk);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Cookie", "csrftoken=" + CSRFToken + ";" + "sessionid=" + sessionID);
+    public String getCoordinateString() {
+        return getLatitude() + "," + getLongitude();
+    };
+    public String getGoogleMapsUrl() {
+        return "https://www.google.com/maps?q="+getLatitude() + "," + getLongitude();
+    };
 
-        int responseCode = con.getResponseCode();
-
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            StringBuilder sb = new StringBuilder();
-            Scanner scanner = new Scanner(con.getInputStream());
-            while (scanner.hasNext()) {
-                sb.append(scanner.nextLine());
-            }
-
-            String[] splitString = sb.toString().split("(;|\\s|<>|/)+");
-
-            for (String split : splitString) {
-
-                if (split.equals("B&nbsp")) {
-                    ranking.incrementB();
-                } else if (split.equals("A&nbsp")) {
-                    ranking.incrementA();
-                } else if (split.equals("C&nbsp")) {
-                    ranking.incrementC();
-                }
-            }
-
-        }
-    }
 }
 
 

@@ -7,51 +7,34 @@ public class Main {
         AuthService auth = new AuthService(httpClient);
 
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        System.out.println("Enter email:");
+        System.out.print("Enter email: ");
         String email = myObj.nextLine();  // Read user input
-        System.out.println("Enter password:");
+        System.out.print("Enter password: ");
         String password = myObj.nextLine();
+
 
         Session session = auth.login(email, password);
 
+        System.out.println("\rSuccessfully logged in!\n");
         UserService userService = new UserService(session, httpClient);
         User user = userService.retrieveUser();
-
+        System.out.println("Welcome " + user.getFullName() + "!\n");
         BuildingRepository buildingsList = new BuildingRepository(session,user,httpClient);
+
+        System.out.println("Retrieving all applied buildings...");
         buildingsList.retrieveAllAppliedBuildings();
 
+        System.out.println("Sorting buildings by 'A' Rankings...");
+
+        buildingsList.sortBuildingsByRankings();
+
+        System.out.println("Listing Buildings:\n");
         for (Building b : buildingsList.buildings) {
-            b.extractRankings(session.getCsrftoken(), session.getSessionId());
-            System.out.println(b.getDesc_address());
+            System.out.println(b.getName() + " - " + b.getDesc_address());
+            System.out.println(b.getGoogleMapsUrl());
             System.out.println("A: " +b.getRanking('A'));
             System.out.println("B: " +b.getRanking('B'));
             System.out.println("C: " +b.getRanking('C'));
         }
     }
 }
-
-        /*
-
-
-        User user = new User(email, password);
-        user.generateCSRFToken();
-        user.login();
-        if (!user.getLoggedIn()) {
-            return;
-        }
-        user.fetchApplicantPk();
-        user.fetchBuildings();
-        user.sortBuildings();
-
-        Building[] buildings = user.getBuildings();
-
-        for (Building building : buildings) {
-            System.out.println(building.getName() + " - " + building.getDesc_address());
-            System.out.println("https://www.google.com/maps?q="+building.getLatitude()+","+building.getLongitude());
-            System.out.println("A: " +building.getRanking('A'));
-            System.out.println("B: " +building.getRanking('B'));
-            System.out.println("C: " +building.getRanking('C'));
-
-            System.out.println("\n");
-        }
-        */

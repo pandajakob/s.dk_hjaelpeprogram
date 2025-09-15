@@ -21,15 +21,16 @@ public class User {
         this.first_name = first_name;
         this.last_name = last_name;
     }
+    public String getFullName() {
+        return getFirst_name() + " " + getLast_name();
+    }
 }
     /*
 
 
     }
 
-    public void sortBuildings()  {
-        Arrays.sort(this.buildings, Comparator.comparingInt(d-> -d.getRanking('A')));
-    }
+
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
