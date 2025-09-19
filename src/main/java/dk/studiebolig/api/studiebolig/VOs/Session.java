@@ -1,0 +1,14 @@
+package dk.studiebolig.api.studiebolig.VOs;
+
+public class Session {
+    private final String csrftoken;
+    private final String sessionId;
+
+    public String getCsrftoken() { return this.csrftoken; }
+    public String getSessionId() { return this.sessionId; }
+
+    public Session(String csrftoken, String sessionId) {
+        this.csrftoken = csrftoken;
+        this.sessionId = sessionId;
+    }
+}
