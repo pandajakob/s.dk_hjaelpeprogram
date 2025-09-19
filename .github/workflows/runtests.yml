@@ -18,6 +18,8 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: mvn compile
       run: mvn compile
+    - name: mvn clean package
+      run: mvn clean package
 
 
 
