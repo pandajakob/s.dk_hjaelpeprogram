@@ -1,10 +1,13 @@
 package dk.studiebolig.api.studiebolig;
 
 import dk.studiebolig.api.studiebolig.VOs.Session;
+import dk.studiebolig.api.studiebolig.VOs.User;
 import dk.studiebolig.api.studiebolig.services.UserService;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserServiceTest implements TestSettings {
     UserService userService = new UserService(new Session("", ""), new HttpClientServiceMock());
@@ -13,12 +16,12 @@ class UserServiceTest implements TestSettings {
     void testRetrieveUser() throws IOException {
         User testUser = userService.retrieveUser();
 
-        assertEquals(user.getEmail(), testUser.getEmail());
-        assertEquals(user.getUsername(), testUser.getUsername());
+        assertEquals(user.email, testUser.email);
+        assertEquals(user.username, testUser.username);
         assertEquals(user.getClass(), testUser.getClass());
-        assertEquals(user.getApplicant_pk(), testUser.getApplicant_pk());
-        assertEquals(user.getFirst_name(), testUser.getFirst_name());
-        assertEquals(user.getLast_name(), testUser.getLast_name());
+        assertEquals(user.applicant_pk, testUser.applicant_pk);
+        assertEquals(user.first_name, testUser.first_name);
+        assertEquals(user.last_name, testUser.last_name);
     }
 
 

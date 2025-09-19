@@ -3,21 +3,13 @@ package dk.studiebolig.api.studiebolig.VOs;
 import dk.studiebolig.api.studiebolig.Ranking;
 
 public class Building {
-    final private int pk;
-    final private String latitude;
-    final private String longitude;
-    final private String name;
-    final private String desc_address;
-    final private String municipality;
-    final private Ranking ranking;
-
-
-    public int getPk() { return this.pk; }
-    public String getLatitude() { return this.latitude; }
-    public String getLongitude() { return this.longitude; }
-    public String getMunicipality() { return this.municipality; }
-    public String getName() { return this.name; }
-    public String getDesc_address() { return this.desc_address; }
+    final public int pk;
+    final public String latitude;
+    final public String longitude;
+    final public String name;
+    final public String desc_address;
+    final public String municipality;
+    final public Ranking ranking;
 
     public Building(int pk, String latitude, String longitude, String name, String desc_address, String municipality, Ranking ranking) {
         this.pk = pk;
@@ -41,13 +33,13 @@ public class Building {
     }
 
     public String getCoordinateString() {
-        return getLatitude() + "," + getLongitude();
+        return this.latitude + "," + this.longitude;
     };
     public String getGoogleMapsUrl() {
-        return "https://www.google.com/maps?q="+getLatitude() + "," + getLongitude();
+        return "https://www.google.com/maps?q="+this.getCoordinateString();
     };
     public String getLinkToBuilding() {
-        return "https://mit.s.dk/studiebolig/building/" + getPk();
+        return "https://mit.s.dk/studiebolig/building/" + this.pk;
     }
 
 }

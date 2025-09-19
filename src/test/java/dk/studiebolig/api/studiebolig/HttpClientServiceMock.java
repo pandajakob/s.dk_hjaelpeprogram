@@ -13,17 +13,17 @@ public class HttpClientServiceMock extends HttpClientService implements TestSett
 
 
     @Override
-    HTTPResponse get(String uri, Map<String, List<String>> headers) throws IOException {
+    public HTTPResponse get(String uri, Map<String, List<String>> headers) throws IOException {
         Map<String, List<String>> responseHeaders = new HashMap<>();
         String body = "";
         if ("https://mit.s.dk/studiebolig/login/".equals(uri)) {
             responseHeaders.put("Set-Cookie", Arrays.asList(new String[] {"csrftoken="+ csrftoken+";"}));
         } else if ("https://mit.s.dk/api/applicant/".equals(uri)) {
 
-            body="{\"results\":[{\"pk\":"+user.getApplicant_pk()+",\"user\":{\"pk\":"+user.getPk()+",\"username\":\""+user.getUsername()+"\",\"first_name\":\""+user.getFirst_name()+"\",\"last_name\":\""+user.getLast_name()+"\",\"applicant_pk\":"+user.getApplicant_pk()+",\"email\":\""+user.getEmail()+"\"}}]}";
-        } else if (uri.contains("https://mit.s.dk/api/building/?has_application_for="+user.getApplicant_pk())) {
+            body="{\"results\":[{\"pk\":"+user.applicant_pk+",\"user\":{\"pk\":"+user.pk+",\"username\":\""+user.username+"\",\"first_name\":\""+user.first_name+"\",\"last_name\":\""+user.last_name+"\",\"applicant_pk\":"+user.applicant_pk+",\"email\":\""+user.email+"\"}}]}";
+        } else if (uri.contains("https://mit.s.dk/api/building/?has_application_for="+user.applicant_pk)) {
             System.out.println("getting user applications");
-            body = "{\n" +
+            body = "{ \n" +
                     "    \"count\": 23,\n" +
                     "    \"next\": null,\n" +
                     "    \"previous\": null,\n" +
@@ -51,13 +51,28 @@ public class HttpClientServiceMock extends HttpClientService implements TestSett
                     "      ]" +
                     "   }";
 
-        }
+
+
+        } else if (uri.contains("https://mit.s.dk/studiebolig/building/")) {
+            return new HTTPResponse("<html>" +
+                    "tenancy1:  B&nbsp;<i class=\"material-icons\">info_outline</i> " +
+                    "tenancy2:  B&nbsp;<i class=\"material-icons\">info_outline</i> " +
+                    "tenancy3:  A&nbsp;<i class=\"material-icons\">info_outline</i> " +
+                    "tenancy4:  A&nbsp;<i class=\"material-icons\">info_outline</i> " +
+                    "tenancy5:  A&nbsp;<i class=\"material-icons\">info_outline</i> " +
+                    "tenancy6:  C&nbsp;<i class=\"material-icons\">info_outline</i> " +
+                    "tenancy7:  &nbsp;<i class=\"material-icons\">info_outline</i> " +
+                    "tenancy8:  &nbsp;<i class=\"material-icons\">info_outline</i> " +
+                    "tenancy9:  &nbsp;<i class=\"material-icons\">info_outline</i> " +
+                    "</html>", headers);
+
+        };
 
         return new HTTPResponse(body, responseHeaders);
     }
 
     @Override
-    HTTPResponse post(String uri, String urlParameters, Map<String, List<String>> headers) throws IOException {
+    public HTTPResponse post(String uri, String urlParameters, Map<String, List<String>> headers) throws IOException {
         Map<String, List<String>> responseHeaders = new HashMap<>();
         String body = "";
         if ("https://mit.s.dk/studiebolig/login/".equals(uri)) {

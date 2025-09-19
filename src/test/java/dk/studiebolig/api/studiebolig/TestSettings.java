@@ -1,6 +1,7 @@
 package dk.studiebolig.api.studiebolig;
 
 import dk.studiebolig.api.studiebolig.VOs.Session;
+import dk.studiebolig.api.studiebolig.VOs.User;
 
 public interface TestSettings {
     final public String sessionid = "5678";

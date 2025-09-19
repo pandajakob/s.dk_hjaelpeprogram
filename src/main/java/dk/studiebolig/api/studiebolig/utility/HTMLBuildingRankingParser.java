@@ -7,7 +7,7 @@ public class HTMLBuildingRankingParser {
     public Ranking extractRanking(String html) {
         System.out.println("Extracting ratings from html...");
         Ranking ranking = new Ranking();
-        String safeSubstring = html.substring(html.indexOf("Ranking"), html.indexOf("</form>"));
+        // String safeSubstring = html.substring(html.indexOf("Ranking"), html.indexOf("</form>"));
         String[] splitString = html.split("(;|\\s|<>|/)+");
         for (String split : splitString) {
             if (split.equals("B&nbsp")) {

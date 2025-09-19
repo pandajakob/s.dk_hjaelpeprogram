@@ -20,6 +20,7 @@ public class User {
     public String getFullName() {
         return this.first_name + " " + this.last_name;
     }
+
 }
     /*
 

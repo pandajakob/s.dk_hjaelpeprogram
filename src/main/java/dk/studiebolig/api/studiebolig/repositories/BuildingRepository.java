@@ -45,19 +45,24 @@ public class BuildingRepository {
 
             for (ApiBuilding b : apiBuildingList.results) {
                 System.out.println("getting building html...");
+
                 String html = httpClient.get("https://mit.s.dk/studiebolig/building/" + b.pk, headers).body;
-                if (html != null) {
+                if (!html.equals("")) {
 
                     HTMLBuildingRankingParser htmlBuildingRankingParser = new HTMLBuildingRankingParser();
                     Ranking ranking = htmlBuildingRankingParser.extractRanking(html);
 
                     buildings.add(new Building(b.pk, b.latitude, b.longitude, b.name, b.desc_address, b.municipality, ranking));
+                } else {
+                    throw new RuntimeException("error ranking building");
                 }
             }
 
             if (apiBuildingList.next == null) { next = false; System.out.println("done");}
             page++;
         }
+
+
         return buildings;
     }
     public void sortBuildingsByRankings()  {

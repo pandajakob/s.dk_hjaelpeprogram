@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class CookieParser {
 
-    String getValueFromCookieString(String cookieString) {
+    public String getValueFromCookieString(String cookieString) {
         String cookieValue = cookieString.substring(0, cookieString.indexOf(";")).substring(cookieString.indexOf("=")+1);
         return cookieValue;
     }
@@ -26,7 +26,7 @@ public class CookieParser {
         return cookies;
     };
 
-    Map<String,String> getCookieFromCookieString(String cookieString) {
+    public Map<String,String> getCookieFromCookieString(String cookieString) {
         String cookieValue = cookieString.substring(0, cookieString.indexOf(";")).substring(cookieString.indexOf("=")+1);
         String cookieName = cookieString.substring(0, cookieString.indexOf('='));
         Map<String, String> cookie = new HashMap<>();
