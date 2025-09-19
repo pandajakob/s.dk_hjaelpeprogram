@@ -18,6 +18,7 @@ import java.util.Scanner;
 
 @org.springframework.stereotype.Controller
 @RestController
+@CrossOrigin(origins = {"https://studiebolig.jakobmichaelsen.dk", "http://127.0.0.1:5500"})
 public class Controller {
     UserData userData = new UserData("user", "user");
 
