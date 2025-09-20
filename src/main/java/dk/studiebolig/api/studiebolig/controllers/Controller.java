@@ -33,21 +33,13 @@ public class Controller {
 
     @CrossOrigin(origins = {"https://studiebolig.jakobmichaelsen.dk", "http://127.0.0.1:5500", "http://127.0.0.1:5500/index.html"})
     @RequestMapping(path = "/login")
-    String login(@RequestBody UserData userData) throws IOException {
+    BuildingRepository login(@RequestBody UserData userData) throws IOException {
         System.out.println("password:" + userData.password);
         System.out.println("username: " + userData.username);
 
         session = auth.login(userData.username, userData.password);
 
         System.out.println("\rSuccessfully logged in!\n");
-
-
-        return "";
-    }
-
-    @CrossOrigin(origins = {"https://studiebolig.jakobmichaelsen.dk", "http://127.0.0.1:5500", "http://127.0.0.1:5500/index.html"})
-    @GetMapping("/buildings")
-    BuildingRepository sendData() throws IOException {
         System.out.println("buildings");
         UserService userService = new UserService(session, httpClient);
         User user = userService.retrieveUser();
@@ -58,6 +50,7 @@ public class Controller {
         buildingsList.retrieveAllAppliedBuildings();
         buildingsList.sortBuildingsByRankings();
         return buildingsList;
+
     }
 
     public void run() throws IOException {
