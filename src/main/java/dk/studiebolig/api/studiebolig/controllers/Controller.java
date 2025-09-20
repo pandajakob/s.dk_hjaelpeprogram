@@ -27,9 +27,9 @@ public class Controller {
         System.out.println("SendHTML");
         return "index.html";
     }
-    @CrossOrigin(origins = {"https://studiebolig.jakobmichaelsen.dk", "http://127.0.0.1:5500"})
+    @CrossOrigin(origins = {"https://studiebolig.jakobmichaelsen.dk", "http://127.0.0.1:5500", "http://127.0.0.1:5500/index.html"})
     @RequestMapping(path = "/login")
-    BuildingRepository sendData(@ModelAttribute UserData userData) throws IOException {
+    BuildingRepository sendData(@RequestBody UserData userData) throws IOException {
         System.out.println("Login" + userData.password);
 
         HttpClientService httpClient = new HttpClientService();

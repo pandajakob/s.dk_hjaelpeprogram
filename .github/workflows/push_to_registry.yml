@@ -21,8 +21,6 @@ jobs:
           cache: maven
       - name: mvn clean package
         run: mvn clean package
-      - name: chech jar name
-        run: ls -l target/
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Log in to Docker Hub
@@ -32,6 +30,3 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: build
         run: docker buildx build --platform linux/amd64,linux/arm64 -t jakobjakob/studiebolig:1.0 --push .
-
-
-
