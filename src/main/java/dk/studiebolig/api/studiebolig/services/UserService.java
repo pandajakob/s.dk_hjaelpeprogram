@@ -8,6 +8,7 @@ import dk.studiebolig.api.studiebolig.VOs.Session;
 import dk.studiebolig.api.studiebolig.VOs.User;
 
 import java.io.IOException;
+import java.net.http.HttpHeaders;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -26,9 +27,9 @@ public class UserService {
 
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
         headers.put("Cookie", Arrays.asList(new String[] {"csrftoken="+session.getCsrftoken()+";"+"sessionid="+session.getSessionId()+";"}));
-
+        headers.put("Accept", Arrays.asList(new String[] {"application/json"}));
+        
         HTTPResponse res = httpClient.get("https://mit.s.dk/api/applicant/", headers);
-
 
         ObjectMapper objectMapper = new ObjectMapper();
 
