@@ -50,7 +50,6 @@ public class Controller {
         buildingsList.retrieveAllAppliedBuildings();
         buildingsList.sortBuildingsByRankings();
         return buildingsList;
-
     }
 
     public void run() throws IOException {

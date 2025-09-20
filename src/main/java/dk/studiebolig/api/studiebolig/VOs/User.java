@@ -1,5 +1,8 @@
 package dk.studiebolig.api.studiebolig.VOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     public final int pk;
     public final int applicant_pk;

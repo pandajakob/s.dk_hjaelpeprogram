@@ -1,7 +1,9 @@
 package dk.studiebolig.api.studiebolig.VOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dk.studiebolig.api.studiebolig.Ranking;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Building {
     final public int pk;
     final public String latitude;
