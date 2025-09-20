@@ -1,5 +1,6 @@
 package dk.studiebolig.api.studiebolig.repositories;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dk.studiebolig.api.studiebolig.*;
@@ -15,6 +16,7 @@ import dk.studiebolig.api.studiebolig.utility.HTMLBuildingRankingParser;
 import java.io.IOException;
 import java.util.*;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BuildingRepository {
     private final Session session;
     private final HttpClientService httpClient;

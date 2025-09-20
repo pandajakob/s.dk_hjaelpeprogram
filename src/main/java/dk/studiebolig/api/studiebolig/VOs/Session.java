@@ -1,5 +1,8 @@
 package dk.studiebolig.api.studiebolig.VOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Session {
     private final String csrftoken;
     private final String sessionId;
