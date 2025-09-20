@@ -1,9 +1,7 @@
 package dk.studiebolig.api.studiebolig;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Ranking {
     int A = 0;
     int B = 0;
