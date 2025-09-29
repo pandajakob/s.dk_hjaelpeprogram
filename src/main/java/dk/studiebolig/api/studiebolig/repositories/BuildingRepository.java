@@ -60,8 +60,6 @@ public class BuildingRepository {
                     } else {
                         throw new RuntimeException("error getting HTML from building: Body is empty");
                     }
-                    Ranking ranking = htmlBuildingRankingParser.extractRanking(response.body());
-                    buildings.add(new Building(b.pk, b.latitude, b.longitude, b.name, b.desc_address, b.municipality, ranking));
                     return response;
                 }));
             }
