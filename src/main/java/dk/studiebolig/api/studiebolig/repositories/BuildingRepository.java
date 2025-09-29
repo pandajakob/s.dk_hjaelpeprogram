@@ -14,7 +14,10 @@ import dk.studiebolig.api.studiebolig.services.HttpClientService;
 import dk.studiebolig.api.studiebolig.utility.HTMLBuildingRankingParser;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BuildingRepository {
@@ -29,15 +32,17 @@ public class BuildingRepository {
         this.httpClient = httpClient;
     }
 
-    public List<Building> retrieveAllAppliedBuildings() throws IOException {
+    public List<Building> retrieveAllAppliedBuildings() throws IOException, InterruptedException, ExecutionException {
+        HTMLBuildingRankingParser htmlBuildingRankingParser = new HTMLBuildingRankingParser();
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
         headers.put("Cookie", Arrays.asList(new String[] {"csrftoken="+session.getCsrftoken()+";"+"sessionid="+session.getSessionId()+";"}));
-        headers.put("Accept", Arrays.asList(new String[] {"application/json"}));
+
 
         int page = 1;
         boolean next = true;
 
         while(next) {
+            long startTime = System.nanoTime();
             System.out.println("loading page " + page +"...");
             HTTPResponse res = httpClient.get("https://mit.s.dk/api/building/?has_application_for="+ user.applicant_pk + "&page=" + page, headers);
 
@@ -48,16 +53,27 @@ public class BuildingRepository {
             for (ApiBuilding b : apiBuildingList.results) {
                 System.out.println("getting building html...");
 
-                String html = httpClient.get("https://mit.s.dk/studiebolig/building/" + b.pk, headers).body;
-                if (!html.equals("")) {
-
-                    HTMLBuildingRankingParser htmlBuildingRankingParser = new HTMLBuildingRankingParser();
-                    Ranking ranking = htmlBuildingRankingParser.extractRanking(html);
-
+                CompletableFuture<HttpResponse<String>> future = httpClient.getAsync("https://mit.s.dk/studiebolig/building/" + b.pk, headers).thenApplyAsync(response->{
+                    String html = response.body();
+                    if (!html.isEmpty()) {
+                        Ranking ranking = htmlBuildingRankingParser.extractRanking(html);
+                        buildings.add(new Building(b.pk, b.latitude, b.longitude, b.name, b.desc_address, b.municipality, ranking));
+                    } else {
+                        throw new RuntimeException("error getting HTML from building: Body is empty");
+                    }
+                    Ranking ranking = htmlBuildingRankingParser.extractRanking(response.body());
                     buildings.add(new Building(b.pk, b.latitude, b.longitude, b.name, b.desc_address, b.municipality, ranking));
-                } else {
-                    throw new RuntimeException("error ranking building");
-                }
+                    return response;
+                });
+                /*
+
+
+                 */
+
+
+                long endTime   = System.nanoTime();
+                long totalTime = endTime - startTime;
+                System.out.println(totalTime/1000000 );
             }
 
             if (apiBuildingList.next == null) { next = false; System.out.println("done");}

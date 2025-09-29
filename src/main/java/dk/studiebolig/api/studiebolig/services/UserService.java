@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class UserService {
     private final Session session;
@@ -23,7 +24,7 @@ public class UserService {
         this.httpClient = httpClient;
     }
 
-    public User retrieveUser() throws IOException {
+    public User retrieveUser() throws IOException, InterruptedException, ExecutionException {
 
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
         headers.put("Cookie", Arrays.asList(new String[] {"csrftoken="+session.getCsrftoken()+";"+"sessionid="+session.getSessionId()+";"}));

@@ -1,18 +1,53 @@
 package dk.studiebolig.api.studiebolig.services;
 import dk.studiebolig.api.studiebolig.VOs.HTTPResponse;
+import dk.studiebolig.api.studiebolig.utility.CookieParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class HttpClientService {
-    public HTTPResponse get(String uri, Map<String, List<String>> headers) throws IOException {
+
+
+    public CompletableFuture<HttpResponse<String>> getAsync(String uri, Map<String, List<String>> headers) throws IOException, InterruptedException, ExecutionException {
         // send get request
+        HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build();
+
+        HttpRequest.Builder reqBuilder = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .version(HttpClient.Version.HTTP_2);
+
+
+        List<String> cookieValue = headers.get("Cookie");
+        if (cookieValue != null) {
+            reqBuilder.header("Cookie", headers.get("Cookie").get(0));
+        }
+
+
+        HttpRequest request = reqBuilder.build();
+
+        return client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+    }
+
+    public HTTPResponse get(String uri, Map<String, List<String>> headers) throws IOException, InterruptedException, ExecutionException {
+
+
         URL url = new URL(uri);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         setConRequestHeaders(conn, headers);
 
@@ -34,7 +69,7 @@ public class HttpClientService {
         Map<String, List<String>> hf = conn.getHeaderFields();
 
         // return the headers
-        return new HTTPResponse(body, hf);
+        return new HTTPResponse(body,hf);
     };
 
     public HTTPResponse post(String uri, String urlParameters, Map<String, List<String>> headers) throws IOException{
@@ -42,7 +77,7 @@ public class HttpClientService {
         byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
 
         URL url = new URL(uri);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setDoOutput(true);
         conn.setInstanceFollowRedirects(false);

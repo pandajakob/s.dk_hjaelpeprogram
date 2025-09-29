@@ -6,6 +6,7 @@ import dk.studiebolig.api.studiebolig.VOs.Session;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 
 public class AuthService {
@@ -15,7 +16,7 @@ public class AuthService {
         this.httpClient = httpClient;
 
     }
-    private String requestCsrfToken() throws IOException {
+    private String requestCsrfToken() throws IOException, InterruptedException, ExecutionException {
         HTTPResponse res = httpClient.get("https://mit.s.dk/studiebolig/login/", new HashMap<String,List<String>>());
 
         CookieParser cp = new CookieParser();
@@ -33,7 +34,7 @@ public class AuthService {
      * @return Session object with CSRF token and Session token;
      * @throws IOException
      */
-    public Session login(String username, String password) throws IOException {
+    public Session login(String username, String password) throws IOException, InterruptedException, ExecutionException {
         String csrftoken = requestCsrfToken();
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
         headers.put("Cookie", Arrays.asList(new String[] {"csrftoken="+csrftoken}));

@@ -13,7 +13,7 @@ class AuthServiceTest  implements TestSettings{
     AuthService auth = new AuthService(new HttpClientServiceMock());
 
     @Test
-    void testLogin() throws IOException {
+    void testLogin() throws IOException, InterruptedException {
         Session session = auth.login(username,password);
 
         assertEquals(csrftoken, session.getCsrftoken());

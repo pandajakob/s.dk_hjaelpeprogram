@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 
 @org.springframework.stereotype.Controller
@@ -33,7 +34,7 @@ public class Controller {
 
     @CrossOrigin(origins = {"https://17.jakobmichaelsen.dk", "http://127.0.0.1:5500", "http://127.0.0.1:5500/index.html"})
     @RequestMapping(path = "/login")
-    BuildingRepository login(@RequestBody UserData userData) throws IOException {
+    BuildingRepository login(@RequestBody UserData userData) throws IOException, InterruptedException, ExecutionException {
         System.out.println("password:" + userData.password);
         System.out.println("username: " + userData.username);
 
@@ -52,6 +53,7 @@ public class Controller {
         return buildingsList;
     }
 
+    /* run locally function
     public void run() throws IOException {
         HttpClientService httpClient = new HttpClientService();
         AuthService auth = new AuthService(httpClient);
@@ -107,6 +109,8 @@ public class Controller {
             System.out.println("");
         }
     }
+
+     */
 
 
 }

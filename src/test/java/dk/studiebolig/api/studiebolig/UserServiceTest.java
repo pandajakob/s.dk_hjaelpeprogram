@@ -13,7 +13,7 @@ class UserServiceTest implements TestSettings {
     UserService userService = new UserService(new Session("", ""), new HttpClientServiceMock());
 
     @Test
-    void testRetrieveUser() throws IOException {
+    void testRetrieveUser() throws IOException, InterruptedException {
         User testUser = userService.retrieveUser();
 
         assertEquals(user.email, testUser.email);
