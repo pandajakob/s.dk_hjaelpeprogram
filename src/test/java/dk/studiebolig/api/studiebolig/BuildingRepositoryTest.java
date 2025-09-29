@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +19,7 @@ class BuildingRepositoryTest implements TestSettings {
     BuildingRepository br = new BuildingRepository(new Session(csrftoken,sessionid),user, httpClient);
 
     @Test
-    void testRetrieveAllAppliedBuildings() throws IOException, InterruptedException {
+    void testRetrieveAllAppliedBuildings() throws IOException, InterruptedException, ExecutionException {
         List<Building> buildings = br.retrieveAllAppliedBuildings();
 
         assertEquals(5, buildings.get(0).pk);

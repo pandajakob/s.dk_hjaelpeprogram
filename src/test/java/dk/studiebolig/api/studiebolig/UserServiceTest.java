@@ -6,6 +6,7 @@ import dk.studiebolig.api.studiebolig.services.UserService;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,7 +14,7 @@ class UserServiceTest implements TestSettings {
     UserService userService = new UserService(new Session("", ""), new HttpClientServiceMock());
 
     @Test
-    void testRetrieveUser() throws IOException, InterruptedException {
+    void testRetrieveUser() throws IOException, InterruptedException, ExecutionException {
         User testUser = userService.retrieveUser();
 
         assertEquals(user.email, testUser.email);
