@@ -36,6 +36,7 @@ public class BuildingRepository {
         HTMLBuildingRankingParser htmlBuildingRankingParser = new HTMLBuildingRankingParser();
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
         headers.put("Cookie", Arrays.asList(new String[] {"csrftoken="+session.getCsrftoken()+";"+"sessionid="+session.getSessionId()+";"}));
+        headers.put("Accept", Arrays.asList(new String[] {"application/json"}));
         List<CompletableFuture<HttpResponse<String>>> futures = new ArrayList<>();
         int page = 1;
         boolean next = true;
