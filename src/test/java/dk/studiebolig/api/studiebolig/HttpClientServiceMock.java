@@ -3,14 +3,133 @@ package dk.studiebolig.api.studiebolig;
 import dk.studiebolig.api.studiebolig.VOs.HTTPResponse;
 import dk.studiebolig.api.studiebolig.services.HttpClientService;
 
+import javax.net.ssl.SSLSession;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class HttpClientServiceMock extends HttpClientService implements TestSettings{
+    @Override
+    public CompletableFuture<HttpResponse<String>> getAsync(String uri, Map<String, List<String>> headers) {
+        CompletableFuture<HttpResponse<String>> future = new CompletableFuture<>();
 
+        if (uri.contains("https://mit.s.dk/studiebolig/building/5")) {
+            HttpResponse<String> response = new HttpResponse<String>() {
+                @Override
+                public int statusCode() {
+                    return 200;
+                }
+
+                @Override
+                public HttpRequest request() {
+                    return null;
+                }
+
+                @Override
+                public Optional<HttpResponse<String>> previousResponse() {
+                    return Optional.empty();
+                }
+
+                @Override
+                public HttpHeaders headers() {
+                    return null;
+                }
+
+                @Override
+                public String body() {
+                    return "\"\\\"<html>\\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy1:  B&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy2:  B&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy3:  A&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy4:  A&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy5:  A&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy6:  C&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy7:  &nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy8:  &nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy9:  &nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"</html>\\\"\"";
+                }
+
+                @Override
+                public Optional<SSLSession> sslSession() {
+                    return Optional.empty();
+                }
+
+                @Override
+                public URI uri() {
+                    return null;
+                }
+
+                @Override
+                public HttpClient.Version version() {
+                    return null;
+                }
+            };
+            future.complete(response);
+        } else if(uri.contains("https://mit.s.dk/studiebolig/building/16")) {
+            HttpResponse<String> response = new HttpResponse<String>() {
+                @Override
+                public int statusCode() {
+                    return 200;
+                }
+
+                @Override
+                public HttpRequest request() {
+                    return null;
+                }
+
+                @Override
+                public Optional<HttpResponse<String>> previousResponse() {
+                    return Optional.empty();
+                }
+
+                @Override
+                public HttpHeaders headers() {
+                    return null;
+                }
+
+                @Override
+                public String body() {
+                    return "\"\\\"<html>\\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy1:  B&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy2:  B&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy3:  B&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy4:  A&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy5:  A&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy6:  C&nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy7:  &nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy8:  &nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"tenancy9:  &nbsp;<i class=\\\\\\\"material-icons\\\\\\\">info_outline</i> \\\" +\\n\" +\n" +
+                            "                \"                    \\\"</html>\\\"\"";
+                }
+
+                @Override
+                public Optional<SSLSession> sslSession() {
+                    return Optional.empty();
+                }
+
+                @Override
+                public URI uri() {
+                    return null;
+                }
+
+                @Override
+                public HttpClient.Version version() {
+                    return null;
+                }
+            };
+            future.complete(response);
+        }
+
+        return future;
+
+
+    }
 
     @Override
     public HTTPResponse get(String uri, Map<String, List<String>> headers) throws IOException {
@@ -19,7 +138,6 @@ public class HttpClientServiceMock extends HttpClientService implements TestSett
         if ("https://mit.s.dk/studiebolig/login/".equals(uri)) {
             responseHeaders.put("Set-Cookie", Arrays.asList(new String[] {"csrftoken="+ csrftoken+";"}));
         } else if ("https://mit.s.dk/api/applicant/".equals(uri)) {
-
             body="{\"results\":[{\"pk\":"+user.applicant_pk+",\"user\":{\"pk\":"+user.pk+",\"username\":\""+user.username+"\",\"first_name\":\""+user.first_name+"\",\"last_name\":\""+user.last_name+"\",\"applicant_pk\":"+user.applicant_pk+",\"email\":\""+user.email+"\"}}]}";
         } else if (uri.contains("https://mit.s.dk/api/building/?has_application_for="+user.applicant_pk)) {
             System.out.println("getting user applications");
@@ -53,20 +171,7 @@ public class HttpClientServiceMock extends HttpClientService implements TestSett
 
 
 
-        } else if (uri.contains("https://mit.s.dk/studiebolig/building/")) {
-            return new HTTPResponse("<html>" +
-                    "tenancy1:  B&nbsp;<i class=\"material-icons\">info_outline</i> " +
-                    "tenancy2:  B&nbsp;<i class=\"material-icons\">info_outline</i> " +
-                    "tenancy3:  A&nbsp;<i class=\"material-icons\">info_outline</i> " +
-                    "tenancy4:  A&nbsp;<i class=\"material-icons\">info_outline</i> " +
-                    "tenancy5:  A&nbsp;<i class=\"material-icons\">info_outline</i> " +
-                    "tenancy6:  C&nbsp;<i class=\"material-icons\">info_outline</i> " +
-                    "tenancy7:  &nbsp;<i class=\"material-icons\">info_outline</i> " +
-                    "tenancy8:  &nbsp;<i class=\"material-icons\">info_outline</i> " +
-                    "tenancy9:  &nbsp;<i class=\"material-icons\">info_outline</i> " +
-                    "</html>", headers);
-
-        };
+        }
 
         return new HTTPResponse(body, responseHeaders);
     }

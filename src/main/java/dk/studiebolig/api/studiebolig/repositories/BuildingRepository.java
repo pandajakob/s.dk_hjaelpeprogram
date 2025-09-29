@@ -36,13 +36,11 @@ public class BuildingRepository {
         HTMLBuildingRankingParser htmlBuildingRankingParser = new HTMLBuildingRankingParser();
         Map<String, List<String>> headers = new HashMap<String, List<String>>();
         headers.put("Cookie", Arrays.asList(new String[] {"csrftoken="+session.getCsrftoken()+";"+"sessionid="+session.getSessionId()+";"}));
-
-
+        List<CompletableFuture<HttpResponse<String>>> futures = new ArrayList<>();
         int page = 1;
         boolean next = true;
 
         while(next) {
-            long startTime = System.nanoTime();
             System.out.println("loading page " + page +"...");
             HTTPResponse res = httpClient.get("https://mit.s.dk/api/building/?has_application_for="+ user.applicant_pk + "&page=" + page, headers);
 
@@ -53,7 +51,7 @@ public class BuildingRepository {
             for (ApiBuilding b : apiBuildingList.results) {
                 System.out.println("getting building html...");
 
-                CompletableFuture<HttpResponse<String>> future = httpClient.getAsync("https://mit.s.dk/studiebolig/building/" + b.pk, headers).thenApplyAsync(response->{
+                 futures.add(httpClient.getAsync("https://mit.s.dk/studiebolig/building/" + b.pk, headers).thenApplyAsync(response-> {
                     String html = response.body();
                     if (!html.isEmpty()) {
                         Ranking ranking = htmlBuildingRankingParser.extractRanking(html);
@@ -64,23 +62,18 @@ public class BuildingRepository {
                     Ranking ranking = htmlBuildingRankingParser.extractRanking(response.body());
                     buildings.add(new Building(b.pk, b.latitude, b.longitude, b.name, b.desc_address, b.municipality, ranking));
                     return response;
-                });
-                /*
-
-
-                 */
-
-
-                long endTime   = System.nanoTime();
-                long totalTime = endTime - startTime;
-                System.out.println(totalTime/1000000 );
+                }));
             }
 
-            if (apiBuildingList.next == null) { next = false; System.out.println("done");}
+            if (apiBuildingList.next == null) { next = false;}
             page++;
         }
 
-
+        // await for all the futures to be completed, so we don't return too early
+        for (CompletableFuture<HttpResponse<String>> future : futures) {
+            while (!future.isDone());
+        }
+        System.out.println("Finished retrieving buildings and rankings");
         return buildings;
     }
     public void sortBuildingsByRankings()  {

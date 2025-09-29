@@ -22,6 +22,7 @@ class BuildingRepositoryTest implements TestSettings {
     void testRetrieveAllAppliedBuildings() throws IOException, InterruptedException, ExecutionException {
         List<Building> buildings = br.retrieveAllAppliedBuildings();
 
+
         assertEquals(5, buildings.get(0).pk);
 
     }
