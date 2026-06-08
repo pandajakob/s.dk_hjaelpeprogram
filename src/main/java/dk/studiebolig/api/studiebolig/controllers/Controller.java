@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 @org.springframework.stereotype.Controller
 @RestController
-@CrossOrigin(origins = {"https://17.jakobmichaelsen.dk", "http://127.0.0.1:5500"})
+@CrossOrigin(origins = "*")
 public class Controller {
     UserData userData = new UserData("user", "user");
 

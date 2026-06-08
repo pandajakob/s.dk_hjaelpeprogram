@@ -45,11 +45,14 @@ async function login(e) {
 
     console.log("res3", data);
     buildingsList = data.buildings;
-
+    if (buildingsList.length < 1) {
+        window.alert("Du har ingen opskrivninger")
+    }
     showBuildingData(data.buildings);
 
   } catch (err) {
     console.log(err);
+    window.alert("Forkert email/kodeord")
   } finally {
     submitButton.ariaBusy = false;
   }
