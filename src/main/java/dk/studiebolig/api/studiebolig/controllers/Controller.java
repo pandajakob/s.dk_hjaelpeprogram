@@ -26,11 +26,7 @@ public class Controller {
     HttpClientService httpClient = new HttpClientService();
     AuthService auth = new AuthService(httpClient);
     Session session;
-    @GetMapping("/")
-    String sendHtml() {
-        System.out.println("SendHTML");
-        return "index.html";
-    }
+
 
     @CrossOrigin(origins = {"https://17.jakobmichaelsen.dk", "http://127.0.0.1:5500", "http://127.0.0.1:5500/index.html"})
     @RequestMapping(path = "/login")

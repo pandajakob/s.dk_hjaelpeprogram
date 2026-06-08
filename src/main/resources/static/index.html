@@ -6,29 +6,44 @@
     <title>s.dk hjælpeprogram</title>
     <link rel="stylesheet" href="styles.css" >
     <link rel="stylesheet" href="pico.min.css" >
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.conditional.min.css">
 </head>
 <body>
-<div id="form-container" class="container ">
-    <form method="post" action="/login">
-        <h2> s.dk login: </h2>
-        <label>Username/Email:</label>
-        <input name="username" id="username" type="text">
-        <label>Password:</label>
-        <input name="password" id="password" type="password">
-        <button type="submit"> login </button>
+    <div id="form-container" class="container">
+        <form id="loginForm" class="pico">
+            <h2> s.dk login: </h2>
+            <label>Username/Email:</label>
+            <input type="text" id="username">
+            <label>Password:</label>
+            <input id="password" type="password">
+            <button id="submitButton" type="submit" id="submit" aria-busy="false"> login </button>
 
-    </form>
+        </form>
+        <div class="logged-in pico">
+            <ul class="buildingList pico">
 
-    <div class="logged-in">
-        <ul class="buildingList">
 
+            </ul>
 
-        </ul>
+        </div>
 
+        <caption class="pico"> Informationer bliver ikke gemt, alt koden er offentlig <a href="https://github.com/pandajakob/s.dk_hjaelpeprogram">her.</a> </caption>
+        
+  
     </div>
+          <div id="map"   ></div>
 
-    <caption> Informationer bliver ikke gemt, alt koden er offentlig <a href="https://github.com/pandajakob/s.dk_hjaelpeprogram">her.</a> </caption>
-</div>
-<script type="module" src="script.js"></script>
+        <div id="buildingList" class="pico"></div>
+    
+    
+    <script type="module" src="script.js"></script>
+
+    <script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        key: "AIzaSyDAIMpwIQ1hyY2g5tTeeH-Na_mexvZR34U",
+        v: "weekly",});
+    </script>
 </body>
 </html>
